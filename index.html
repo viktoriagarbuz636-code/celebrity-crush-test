@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7e8f2">
+  <meta name="description" content="Развлекательный тест для вечеринки: какой знаменитый парень тебе подходит?">
+  <title>Кто твой знаменитый парень? 💗</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-page="quiz">
+  <main class="shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="На главную">💗 celebrity crush test</a>
+      <div class="header-actions">
+        <a class="nav-link" href="results.html">Общая доска результатов ↗</a>
+      </div>
+    </header>
+
+    <div id="demo-mode-banner" class="mode-banner" hidden>
+      ✨ <strong>Демо-режим (локальная доска):</strong> результаты сохраняются в этом браузере. Чтобы общая доска синхронизировалась между телефонами на вечеринке, укажи ключи Supabase в <code>app.js</code>.
+    </div>
+
+    <section id="start-screen" class="panel intro-panel">
+      <div class="eyebrow">ТЕСТ ДЛЯ POWERPOINT-ПАТИ</div>
+      <h1>Кто твой<br><span>знаменитый парень?</span></h1>
+      <p class="lead">Ответь на 10 вопросов и узнай своё идеальное совпадение: российские звёзды, футболисты, голливудские актёры, любимые персонажи и секретные джекпоты.</p>
+      <div class="hero-stickers" aria-hidden="true"><span>💋</span><span>🇷🇺</span><span>⚽</span><span>🎬</span><span>✨</span></div>
+      <div class="intro-facts">
+        <span>10 вопросов</span><span>89 кандидатов</span><span>50 наших звёзд</span><span>Секретные финалы</span>
+      </div>
+
+      <div class="start-options-box">
+        <label class="start-field-label" for="pre-display-name">Твоё имя или ник для общей доски (по желанию)</label>
+        <input id="pre-display-name" class="start-input" type="text" maxlength="24" autocomplete="nickname" placeholder="Например: Аня ✨ (можно ввести и после теста)">
+        <label class="auto-publish-row" for="auto-publish-toggle">
+          <input id="auto-publish-toggle" type="checkbox" checked>
+          <span>Автоматически опубликовать мой результат на общей доске участников после 10-го вопроса (имя и результат будут видны всем на экране)</span>
+        </label>
+
+        <div class="pool-filter-section">
+          <div class="pool-filter-header">
+            <span class="pool-filter-title">Кого включить в подборку?</span>
+            <button id="preset-ru-only" class="pool-preset-btn" type="button">Только наши звёзды 🇷🇺</button>
+          </div>
+          <div class="pool-chips" id="pool-filters">
+            <label class="pool-chip"><input type="checkbox" value="ru" checked> 🇷🇺 Российские звёзды (44)</label>
+            <label class="pool-chip"><input type="checkbox" value="football" checked> ⚽ Футболисты (17)</label>
+            <label class="pool-chip"><input type="checkbox" value="foreign" checked> 🎬 Зарубежные актёры (14)</label>
+            <label class="pool-chip"><input type="checkbox" value="character" checked> ✨ Персонажи (11)</label>
+          </div>
+        </div>
+      </div>
+
+      <button id="start-button" class="button button-primary" type="button">Начать тест <span aria-hidden="true">→</span></button>
+      <p class="fine-print">Тест создан специально для весёлой презентации с подругами. Все совпадения шуточные и созданы для отличного настроения.</p>
+    </section>
+
+    <section id="quiz-screen" class="panel quiz-panel" hidden>
+      <div class="quiz-topline">
+        <span id="question-counter" class="eyebrow">ВОПРОС 1 ИЗ 10</span>
+        <span id="progress-percent" class="progress-label">10%</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Прогресс теста" aria-valuemin="0" aria-valuemax="10" aria-valuenow="1" id="progress-track">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <h2 id="question-title" class="question-title"></h2>
+      <div id="answer-options" class="answer-options"></div>
+      <div class="quiz-footer">
+        <button id="back-button" class="button button-quiet" type="button">← Назад</button>
+        <button id="next-button" class="button button-primary" type="button" disabled>Дальше →</button>
+      </div>
+    </section>
+
+    <section id="result-screen" class="panel result-panel" hidden>
+      <div id="result-emoji" class="result-sparkle" aria-hidden="true">💘</div>
+      <div class="eyebrow">ТВОЁ ИДЕАЛЬНОЕ СОВПАДЕНИЕ</div>
+      <div class="result-badges">
+        <span id="result-category-badge" class="category-badge">Романтик</span>
+        <span id="result-group-badge" class="group-badge">Российская звезда</span>
+      </div>
+      <h2>Тебе подходит...</h2>
+      <div id="result-name" class="result-name"></div>
+      <div id="result-subtitle" class="result-subtitle"></div>
+      <p id="result-description" class="result-description"></p>
+      <div id="result-verdict" class="result-verdict"></div>
+
+      <div class="result-extra-grid">
+        <div class="extra-card">
+          <h4>Твой профиль по ответам</h4>
+          <div id="result-breakdown" class="breakdown-list"></div>
+        </div>
+        <div class="extra-card">
+          <h4>Кто ещё был очень близок</h4>
+          <ul id="result-runners-up" class="runners-list"></ul>
+        </div>
+      </div>
+
+      <div id="save-section" class="save-section">
+        <h3>Добавить результат на общую доску?</h3>
+        <p class="save-hint">Введи имя или ник (до 24 символов). Его и твой результат увидят все участницы на экране результатов. Не указывай телефон, почту или личные данные.</p>
+        <form id="save-form" class="save-form">
+          <label for="display-name">Твоё имя или ник</label>
+          <input id="display-name" name="displayName" type="text" maxlength="24" minlength="1" autocomplete="nickname" placeholder="Например, Соня" required>
+          <button id="save-button" class="button button-primary" type="submit">Опубликовать результат 💗</button>
+        </form>
+        <p id="save-status" class="status-message" role="status" aria-live="polite"></p>
+        <div id="save-success" class="save-success" hidden>
+          <p id="save-success-text">Готово! Твой результат появился на общей доске ✨</p>
+          <a class="button button-primary button-link" href="results.html">Открыть общую доску результатов →</a>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button id="restart-button" class="button button-quiet" type="button">Пройти ещё раз 🔄</button>
+        <a class="text-link" href="results.html">Перейти к результатам участников ↗</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">Сделано для лучшей поверпоинт-пати ✨</footer>
+  </main>
+</body>
+</html>

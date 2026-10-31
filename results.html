@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7e8f2">
+  <meta name="description" content="Общая доска результатов теста про знаменитых парней.">
+  <title>Результаты участников — Celebrity Crush Test</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-page="results">
+  <main class="shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="На главную">💗 celebrity crush test</a>
+      <div class="header-actions">
+        <a class="nav-link" href="index.html">← Пройти тест</a>
+      </div>
+    </header>
+
+    <div id="demo-mode-banner-results" class="mode-banner" hidden>
+      ✨ <strong>Демо-режим (локальная доска):</strong> сейчас отображаются записи из этого браузера. После настройки Supabase в <code>app.js</code> здесь будут появляться результаты со всех устройств в реальном времени.
+    </div>
+
+    <section class="panel results-panel">
+      <div class="eyebrow">ОБЩАЯ ДОСКА ВЕЧЕРИНКИ</div>
+      <h1>Кто кому достался? 💌</h1>
+      <p class="lead results-lead">Экран результатов для презентации: новые записи подгружаются автоматически.</p>
+
+      <div id="party-stats" class="party-stats">
+        <div class="stat-box">
+          <div class="stat-label">Участниц на доске</div>
+          <div id="stat-total" class="stat-value">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Главный вайб вечеринки</div>
+          <div id="stat-top-vibe" class="stat-value">—</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Популярный краш</div>
+          <div id="stat-top-crush" class="stat-value">—</div>
+        </div>
+      </div>
+
+      <div class="results-toolbar">
+        <div id="results-count" class="results-count">Загружаем результаты…</div>
+        <div class="toolbar-buttons">
+          <button id="auto-refresh-button" class="live-pill" type="button" aria-pressed="true" title="Автоматическое обновление списка каждые 8 секунд и через Realtime">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span id="auto-refresh-label">Live-обновление: ВКЛ</span>
+          </button>
+          <button id="share-board-button" class="button button-quiet button-small" type="button">📱 Ссылка для подруг</button>
+          <button id="refresh-button" class="button button-secondary button-small" type="button">↻ Обновить</button>
+        </div>
+      </div>
+
+      <div id="qr-drawer" class="qr-drawer" hidden>
+        <h3>Пригласить подруг в тест 📲</h3>
+        <p>Отправь эту ссылку в общий чат вечеринки, чтобы все прошли тест со своих телефонов:</p>
+        <div class="share-url-row">
+          <input id="share-url-input" class="share-url-input" type="text" readonly value="">
+          <button id="copy-url-button" class="button button-primary button-small" type="button">Скопировать ссылку</button>
+        </div>
+      </div>
+
+      <p id="results-status" class="status-message" role="status" aria-live="polite"></p>
+      <div id="results-list" class="results-list" aria-live="polite"></div>
+      <div class="centered">
+        <button id="load-more-button" class="button button-quiet" type="button" hidden>Показать ещё</button>
+      </div>
+      <div class="results-bottom">
+        <a class="button button-primary button-link" href="index.html">Пройти тест →</a>
+        <button id="clear-demo-button" class="button button-quiet button-small" type="button" hidden>Очистить демо-записи</button>
+      </div>
+      <p class="fine-print">На этой странице публично отображаются имя (или ник) и выпавший результат участницы.</p>
+    </section>
+    <footer class="site-footer">Сделано для лучшей поверпоинт-пати ✨</footer>
+  </main>
+</body>
+</html>
